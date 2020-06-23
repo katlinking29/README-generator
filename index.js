@@ -1,8 +1,11 @@
 const fs = require("fs");
 const inquirer = require("inquirer");
+const util = require("util");
 
-inquirer
-  .prompt([
+const writeFileAsync = util.promisify(fs.writeFile);
+
+// using inquirer.prompt, ask the user to provide input that will then be added to a dynamically created README
+inquirer.prompt([
     {
       type: "input",
       message: "What is the title of your project?",
@@ -38,7 +41,7 @@ inquirer
     },
 
     {
-        type: "checkbox",
+        type: "list",
         message: "What licenses apply to your project?",
         name: "license",
         choices: [
@@ -71,7 +74,49 @@ inquirer
     },
   
   ])
+
   .then(function(response) {
+    //create the README file from the user's responses
+    writeFileAsync("README.md", JSON.stringify(response), function(err) {
+
+      if (err) {
+        return console.log(err);
+      }
+    
+      const READMEtext = `
+      ${response.title}
+      **Description**
+      ${response.description}
+      
+      Table of Contents: 
+        1. Installation
+        2. Usage
+        3. License
+        4. Contributing
+        5. Tests
+        6. Quesitons
+      
+      **Installation**
+      ${response.installation}
+
+      **Usage** 
+      ${response.usage}
+        
+      **License** 
+      ${response.license}
+
+      **Contributing**
+      ${response.contributions}
+
+      **Tests**
+      ${response.test}
+
+      **Questions**
+      If you have questions, please contact ${response.username} or email ${response.email}
+      ${response.questions}
+      `
+    
+    });
 
     console.log(response.title, response.description, response.installation, response.usage, response.contributions, response.test, response.license, response.username, response.email)
   });

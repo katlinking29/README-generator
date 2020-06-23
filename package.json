@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/katlinking29/README-generator#readme",
   "dependencies": {
-    "inquirer": "^7.2.0"
+    "inquirer": "^7.2.0",
+    "util": "^0.12.3"
   }
 }
