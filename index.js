@@ -5,7 +5,8 @@ const util = require("util");
 const writeFileAsync = util.promisify(fs.writeFile);
 
 // using inquirer.prompt, ask the user to provide input that will then be added to a dynamically created README
-inquirer.prompt([
+function promptUser () {
+ return inquirer.prompt([
     {
       type: "input",
       message: "What is the title of your project?",
@@ -74,49 +75,54 @@ inquirer.prompt([
     },
   
   ])
+}
 
-  .then(function(response) {
+function generateREADME(response) {
+  return `
+  ${response.title}
+  
+  **Description**
+  ${response.description}
+  
+  Table of Contents: 
+    1. Installation
+    2. Usage
+    3. License
+    4. Contributing
+    5. Tests
+    6. Quesitons
+  
+  **Installation**
+  ${response.installation}
+
+  **Usage** 
+  ${response.usage}
+    
+  **License** 
+  ${response.license}
+
+  **Contributing**
+  ${response.contributions}
+
+  **Tests**
+  ${response.test}
+
+  **Questions**
+  If you have questions, please contact ${response.username} or email ${response.email}
+  ${response.questions}
+  `
+}
+
+  promptUser().then(function(response) {
     //create the README file from the user's responses
-    writeFileAsync("README.md", JSON.stringify(response), function(err) {
+      const README = generateREADME(response)
 
-      if (err) {
-        return console.log(err);
-      }
-    
-      const READMEtext = `
-      ${response.title}
-      **Description**
-      ${response.description}
-      
-      Table of Contents: 
-        1. Installation
-        2. Usage
-        3. License
-        4. Contributing
-        5. Tests
-        6. Quesitons
-      
-      **Installation**
-      ${response.installation}
+      return writeFileAsync("README.md", README)
 
-      **Usage** 
-      ${response.usage}
-        
-      **License** 
-      ${response.license}
-
-      **Contributing**
-      ${response.contributions}
-
-      **Tests**
-      ${response.test}
-
-      **Questions**
-      If you have questions, please contact ${response.username} or email ${response.email}
-      ${response.questions}
-      `
-    
-    });
-
-    console.log(response.title, response.description, response.installation, response.usage, response.contributions, response.test, response.license, response.username, response.email)
-  });
+      .then(function() {
+        console.log("Successfully generated README.md");
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+  })
