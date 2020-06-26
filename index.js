@@ -79,35 +79,35 @@ function promptUser () {
 
 function generateREADME(response) {
   return `
-  ${response.title}
+  # ${response.title}
   
-  **Description**
+  ## Description
   ${response.description}
   
-  Table of Contents: 
-    1. Installation
-    2. Usage
-    3. License
-    4. Contributing
-    5. Tests
-    6. Quesitons
+  Table of Contents:
+  * [Installation](#installation)
+  * [Usage](#usage)
+  * [License](#license)
+  * [Credits](#credits)
+  * [Tests](#tests)
+  * [Questions](#questions)
   
-  **Installation**
+  ## Installation 
   ${response.installation}
 
-  **Usage** 
+  ## Usage
   ${response.usage}
     
-  **License** 
+  ## License
   ${response.license}
 
-  **Contributing**
+  ## Contributing
   ${response.contributions}
 
-  **Tests**
+  ## Tests
   ${response.test}
 
-  **Questions**
+  ## Questions
   If you have questions, please contact ${response.username} or email ${response.email}
   ${response.questions}
   `
