@@ -51,7 +51,7 @@ function promptUser () {
           "MIT", 
           "ISC",
           "Mozilla Public License 2.0",
-          "Boost Software Licnese 1.0",
+          "Boost Software License 1.0",
           "The Unlicense",
         ]
       },
@@ -75,7 +75,7 @@ function generateREADME(response) {
 // this function will be included in the write file function, so the README is formatted properly, while also including the user's reponses
   return `
   # ${response.title}
-  ${badge}
+  ${badgeSelection}
   
   ## Description
   ${response.description}
@@ -107,13 +107,46 @@ function generateREADME(response) {
   If you have questions, please contact ${response.username} or email ${response.email}
   `
 }
+  // creating an empty array that will store badges, based on the user's license selection
+  const badgeSelection = []
+
+  function generateBadge(response) {
+    if (response.license === "Apcahe") {
+      badgeSelection.push("![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)")
+    };
+
+    if (response.license === "GNU LGPLv3") {
+      badgeSelection.push("![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)")
+    };
+      
+    if (response.license === "MIT") {
+      badgeSelection.push("![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)")
+    };
+      
+    if (response.license === "ISC") {
+      badgeSelection.push("![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)")
+    };
+      
+    if (response.license === "Mozilla Public License 2.0") {
+      badgeSelection.push("![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)")
+    };
+      
+    if (response.license === "Boost Software License 1.0") {
+      badgeSelection.push("![License: Boost](https://img.shields.io/badge/License-Boost%201.0-lightblue.svg)")
+    };
+      
+    if (response.license === "The Unlicense") {
+      badgeSelection.push("  ![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)")
+    };
+  };
 
   promptUser().then(function(response) {
-    //create the README file from the user's responses
-      const README = generateREADME(response)
-      createBadge(response)
-
-      return writeFileAsync("README.md", README)
+  //choose the badge 
+    generateBadge(response);
+  //create the README file from the user's responses
+    const README = generateREADME(response);
+  // create the README.md file
+     return writeFileAsync("README.md", README)
 
       .then(function() {
         console.log("Successfully generated README.md");
@@ -122,51 +155,3 @@ function generateREADME(response) {
         console.log(err);
       });
   }); 
-// creating an array to store badge links
-const badge = [
-  "[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)",
-  "[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)",
-  "[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)", 
-  "[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)", 
-  "[![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)",
-  "[![License](https://img.shields.io/badge/License-Boost%201.0-lightblue.svg)](https://www.boost.org/LICENSE_1_0.txt)",
-  "[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)",
-];
-
-// creating a function that will choose the badge link from the array, based on the license the user selects
-function createBadge(response) {
-  if (response.license === "Apache") {
-  let badge = badge[0]
-  return badge
-  };
-
-  if (response.license === "GNU LGPLv3") {
-    let badge = badge[1]
-    return badge
-  };
-
-  if (response.license === "MIT") {
-    let badge = badge[2]
-    return badge
-  };
-
-  if (response.license === "ISC") {
-    let badge = badge[3]
-    return badge
-  };
-
-  if (response.license === "Mozilla Public License 2.0") {
-    let badge = badge[4]
-    return badge
-  };
-
-  if (response.license === "Boost Software Licnese 1.0") {
-    let badge = badge[5]
-    return badge
-  };
-
-  if (response.license === "The Unlicense") {
-    let badge = badge[5]
-    return badge
-  };
-};
